@@ -4,7 +4,7 @@ author: "SLEE"
 date: "10/14/2022"
 output: html_document
 ---
-  
+
 ```{r setup, include=FALSE}
 
 #####Make sure you load any required packages.
@@ -45,22 +45,30 @@ nobel
 ## Part 1
 
 Using words, describe the visualization you are going to make using which variables/characteristics in your data:
-  
-  *Example*: For my first figure, I am going to create a scatterplot that plots vehicle weight on the x axis and miles per gallon the y axis. I will create a two column tibble with these data.
+
+*1. Histograms and density plots: distributions of winners by age.*
 
 In the code chunk below, show your work filtering the data and create the subset of data you will display graphically.
 
 ```{r data_1}
-fig_dat1<-dat %>% select(wt,mpg)
+nobel %>% 
+  dplyr::select(age_get_prize) -> winners_by_age
+
+
 ####make sure you call the data so it will display in your report
-fig_dat1
+
+winners_by_age %>% 
+    ggplot2::ggplot(mapping = aes(x = age_get_prize)) +
+  ggplot2::geom_histogram()
+
+
 ```
 
 ## Part 2
 
 Using words, describe the *second* visualization you are going to make using which variables/characteristics in your data:
-  
-  *Example*: For my second figure, I am going to create a boxplot that includes three boxplots for miles per gallon, horsepower, and weight.
+
+*2. Bar charts: winners by gender, category, university.*
 
 In the code chunk below, show your work filtering the data and create the subset of data you will display graphically.
 
@@ -70,12 +78,11 @@ fig_dat2<-dat %>% select(mpg,hp,wt)
 fig_dat2
 ```
 
-
 ## Part 3
 
 Using words, describe the *third* visualization you are going to make using which variables/characteristics in your data:
-  
-  *Example*: For the third figure, I will display a density plot of the quarter mile time for six cylinder cars.
+
+*3. Box plot: average age of winners by gender, average age of winners by category.*
 
 ```{r data_3}
 fig_dat3<-dat %>% filter(cyl==6) %>% select(qsec) 
