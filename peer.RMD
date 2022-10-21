@@ -19,6 +19,7 @@ library(reshape2)
 library(skimr)
 library(janitor)
 library(lubridate)
+library(ggthemes)
 
 
 ```
@@ -52,14 +53,14 @@ In the code chunk below, show your work filtering the data and create the subset
 
 ```{r data_1}
 nobel %>% 
-  dplyr::select(age_get_prize) -> winners_by_age
+  dplyr::select(age_get_prize) -> number_1_data
 
 
 ####make sure you call the data so it will display in your report
 
 winners_by_age %>% 
     ggplot2::ggplot(mapping = aes(x = age_get_prize)) +
-  ggplot2::geom_histogram()
+  ggplot2::geom_histogram() -> number_1_fig
 
 
 ```
@@ -68,14 +69,31 @@ winners_by_age %>%
 
 Using words, describe the *second* visualization you are going to make using which variables/characteristics in your data:
 
-*2. Bar charts: winners by gender, category, university.*
+*2. Bar charts: winners by Top 10 university*
 
 In the code chunk below, show your work filtering the data and create the subset of data you will display graphically.
 
 ```{r data_2}
-fig_dat2<-dat %>% select(mpg,hp,wt)
+nobel %>% 
+  dplyr::select(name_of_university) %>% 
+  dplyr::count(name_of_university) %>% 
+  dplyr::arrange(desc(n)) %>% 
+  dplyr::slice_head(n = 10) -> number_2_data
+
+
 ####make sure you call the data so it will display in your report
-fig_dat2
+
+number_2_data %>% 
+  ggplot2::ggplot(mapping = aes(y = reorder(name_of_university, n), x = n)) +
+  ggplot2::geom_bar(stat = "identity",
+                    mapping = aes(fill = name_of_university),
+                    show.legend = FALSE) +
+  ggplot2::theme_minimal()
+
+# You still need to delete first one.. that's total
+# x and y axis name
+# label
+
 ```
 
 ## Part 3
