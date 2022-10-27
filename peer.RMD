@@ -58,10 +58,12 @@ nobel %>%
 
 ####make sure you call the data so it will display in your report
 
-winners_by_age %>% 
-    ggplot2::ggplot(mapping = aes(x = age_get_prize)) +
-  ggplot2::geom_histogram() -> number_1_fig
+number_1_data %>% 
+  ggplot2::ggplot(mapping = aes(x = age_get_prize)) +
+  ggplot2::geom_histogram() +
+  ggplot2::theme_minimal() -> number_1_fig
 
+number_1_fig
 
 ```
 
@@ -84,15 +86,20 @@ nobel %>%
 ####make sure you call the data so it will display in your report
 
 number_2_data %>% 
+  dplyr::slice(n = -1) %>% 
   ggplot2::ggplot(mapping = aes(y = reorder(name_of_university, n), x = n)) +
   ggplot2::geom_bar(stat = "identity",
                     mapping = aes(fill = name_of_university),
                     show.legend = FALSE) +
-  ggplot2::theme_minimal()
+  ggplot2::theme_minimal() +
+  ggplot2::labs(x = "Number of Nobel Prize", 
+                y = "Name of University") +
+  ggplot2::geom_text(mapping = aes(label = n), hjust = "outward") -> number_2_fig
 
-# You still need to delete first one.. that's total
-# x and y axis name
-# label
+
+number_2_fig
+
+
 
 ```
 
@@ -100,10 +107,27 @@ number_2_data %>%
 
 Using words, describe the *third* visualization you are going to make using which variables/characteristics in your data:
 
-*3. Box plot: average age of winners by gender, average age of winners by category.*
+*3. Box plot: average age of winners by category.*
 
 ```{r data_3}
-fig_dat3<-dat %>% filter(cyl==6) %>% select(qsec) 
-####make sure you call the data so it will display in your report
-fig_dat3
+nobel %>% 
+  dplyr::select(gender, age, category) %>% 
+  dplyr::group_by(category) %>% 
+  dplyr::summarise(mean = mean(age)) %>% 
+  dplyr::mutate(mean = round(mean, 0)) -> number_3_data
+
+
+number_3_data %>% 
+  ggplot2::ggplot(mapping = aes(x = category, y = mean, fill = category)) +
+  ggplot2::geom_bar(stat = "identity") +
+  ggplot2::coord_polar() +
+  ggplot2::geom_text(mapping = aes(label = paste0(category, " - ", mean))) +
+  ggplot2::scale_y_continuous(labels = scales::number) +
+  ggplot2::theme_void() +
+  ggplot2::theme(legend.position = "none")+
+  ggplot2::labs(title = "Average age of Winners by Category") -> number_3_fig
+
+
+number_3_fig
+
 ```
