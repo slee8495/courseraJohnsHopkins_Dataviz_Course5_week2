@@ -1,5 +1,5 @@
 ---
-  title: "Data Review"
+title: "Data Review"
 author: "SLEE"
 date: "10/14/2022"
 output: html_document
@@ -47,7 +47,7 @@ nobel
 
 Using words, describe the visualization you are going to make using which variables/characteristics in your data:
 
-*1. Histograms and density plots: distributions of winners by age.*
+*1. Histogram: distributions of winners by age.*
 
 In the code chunk below, show your work filtering the data and create the subset of data you will display graphically.
 
@@ -60,8 +60,11 @@ nobel %>%
 
 number_1_data %>% 
   ggplot2::ggplot(mapping = aes(x = age_get_prize)) +
-  ggplot2::geom_histogram() +
-  ggplot2::theme_minimal() -> number_1_fig
+  ggplot2::geom_histogram(fill = "lightblue") +
+  ggplot2::theme_minimal() +
+  ggplot2::labs(title = "Histogram: distributions of winners by age",
+                x = "Age get Prize",
+                y = NULL) -> number_1_fig
 
 number_1_fig
 
@@ -92,7 +95,8 @@ number_2_data %>%
                     mapping = aes(fill = name_of_university),
                     show.legend = FALSE) +
   ggplot2::theme_minimal() +
-  ggplot2::labs(x = "Number of Nobel Prize", 
+  ggplot2::labs(title = "Bar charts: winners by Top 10 university",
+                x = "Number of Nobel Prize", 
                 y = "Name of University") +
   ggplot2::geom_text(mapping = aes(label = n), hjust = "outward") -> number_2_fig
 
@@ -114,11 +118,12 @@ nobel %>%
   dplyr::select(gender, age, category) %>% 
   dplyr::group_by(category) %>% 
   dplyr::summarise(mean = mean(age)) %>% 
-  dplyr::mutate(mean = round(mean, 0)) -> number_3_data
+  dplyr::mutate(mean = round(mean, 0)) %>% 
+  dplyr::arrange(desc(mean)) -> number_3_data
 
 
 number_3_data %>% 
-  ggplot2::ggplot(mapping = aes(x = category, y = mean, fill = category)) +
+  ggplot2::ggplot(mapping = aes(x = desc(reorder(category, mean)), y = mean, fill = category)) +
   ggplot2::geom_bar(stat = "identity") +
   ggplot2::coord_polar() +
   ggplot2::geom_text(mapping = aes(label = paste0(category, " - ", mean))) +
@@ -132,6 +137,3 @@ number_3_fig
 
 ```
 
-
-# last fig, order from largest to smallest next time
-# submit
